@@ -15,7 +15,7 @@ angular.module('myApp.controllers', [])
 
     // Get data from firebase SERVICE;
     // This will print out a collection of data from database,
-    // similar to index action on rails
+    // similar to what index action does in rails
     $scope.parties = $firebase(partiesRef);
 
     // similar to new action rails where we initialize an instance
@@ -44,5 +44,30 @@ angular.module('myApp.controllers', [])
       // Change notified status
       party.notified = "Yes";
       $scope.parties.$save(party.$id);
+    };
+  }])
+  .controller('AuthController',
+               ['$scope', '$firebaseSimpleLogin',
+                function($scope, $firebaseSimpleLogin){
+    var authRef = new Firebase('https://waitandeat-louishoan.firebaseio.com/');
+
+    var auth = $firebaseSimpleLogin(authRef);
+
+    $scope.user = {email: '', password: ''};
+
+    $scope.register = function(){
+      auth.$createUser($scope.user.email, $scope.user.password)
+          .then(function(data){
+            // console.log(data);
+            auth.$login('password', $scope.user);
+      });
+    };
+
+
+    $scope.login = function(){
+      auth.$login('password', $scope.user)
+          .then(function(data){
+            console.log(data);
+      });
     };
   }]);
