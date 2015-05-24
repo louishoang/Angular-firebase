@@ -47,8 +47,8 @@ angular.module('myApp.controllers', [])
     };
   }])
   .controller('AuthController',
-               ['$scope', '$firebaseSimpleLogin',
-                function($scope, $firebaseSimpleLogin){
+               ['$scope', '$firebaseSimpleLogin', '$location',
+                function($scope, $firebaseSimpleLogin, $location){
     var authRef = new Firebase('https://waitandeat-louishoan.firebaseio.com/');
 
     var auth = $firebaseSimpleLogin(authRef);
@@ -58,16 +58,25 @@ angular.module('myApp.controllers', [])
     $scope.register = function(){
       auth.$createUser($scope.user.email, $scope.user.password)
           .then(function(data){
-            // console.log(data);
-            auth.$login('password', $scope.user);
+            console.log(data);
+            $scope.login();
       });
     };
 
 
     $scope.login = function(){
       auth.$login('password', $scope.user)
+      //return promise
           .then(function(data){
             console.log(data);
+        //Redirect user to /waitlist
+        $location.path('/waitlist');
       });
+    };
+
+    $scope.logout = function(){
+      auth.$logout();
+      // Redirect user to home page
+        $location.path('/');
     };
   }]);
