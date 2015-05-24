@@ -1,0 +1,69 @@
+<form ng-submit="saveParty()" class="form-inline party-form" role="form">
+  <div class="form-group">
+    <label class="sr-only" for="partyName">Party name</label>
+    <input ng-model="newParty.name"
+            type="text"
+            class="form-control"
+            id="partyName"
+            placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="phoneNumber">Phone number</label>
+    <input ng-model="newParty.phone"
+            type="text"
+            class="form-control"
+            id="phoneNumber"
+            placeholder="Phone">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="sizeOfParty">Size of party</label>
+    <input ng-model="newParty.size"
+          type="text"
+          class="form-control"
+          id="sizeOfParty"
+          placeholder="Size of party">
+  </div>
+  <button type="submit" class="btn btn-primary">Add party</button>
+</form>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Done?</th>
+      <th>Information</th>
+      <th>Notified</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="party in parties | orderByPriority">
+      <td>
+        <input type="checkbox"/>
+      </td>
+      <td>
+        <div>
+          <strong>{{party.name}} ({{party.size}} people)</strong>
+        </div>
+        <div>
+          {{party.phone}}
+        </div>
+         <div>
+          <!-- TODO: add date created -->
+        </div>
+      </td>
+      <td>
+        <div>
+          <!-- TODO: Add party notified -->
+        </div>
+      </td>
+      <td>
+        <button ng-click="sendTextMessage(party.phone)"
+                type="submit"
+                class="btn btn-success">Send SMS</button>
+        <button ng-click="parties.$remove(party.$id)"
+                type="submit"
+                class="btn btn-danger">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
