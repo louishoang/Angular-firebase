@@ -8,10 +8,11 @@ angular.module('myApp.controllers', [])
   }])
   .controller('WaitListController',
                ['$scope', '$firebase',
-                 function($scope, $firebase) {
+                'FIREBASE_URL',
+                 function($scope, $firebase, FIREBASE_URL) {
 
     // Etablish connection to firebase server
-    var partiesRef = new Firebase('https://waitandeat-louishoan.firebaseio.com/parties');
+    var partiesRef = new Firebase(FIREBASE_URL + 'parties');
 
     // Get data from firebase SERVICE;
     // This will print out a collection of data from database,
@@ -32,7 +33,7 @@ angular.module('myApp.controllers', [])
 
     // send message start
     $scope.sendTextMessage = function(party){
-      var textMessageRef = new Firebase('https://waitandeat-louishoan.firebaseio.com/textMessages');
+      var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
       var textMessages = $firebase(textMessageRef);
       var newTextMessage = {
         phoneNumber: party.phone,
@@ -48,8 +49,10 @@ angular.module('myApp.controllers', [])
   }])
   .controller('AuthController',
                ['$scope', '$firebaseSimpleLogin', '$location',
-                function($scope, $firebaseSimpleLogin, $location){
-    var authRef = new Firebase('https://waitandeat-louishoan.firebaseio.com/');
+                'FIREBASE_URL',
+                function($scope, $firebaseSimpleLogin,
+                         $location, FIREBASE_URL){
+    var authRef = new Firebase(FIREBASE_URL);
 
     var auth = $firebaseSimpleLogin(authRef);
 
