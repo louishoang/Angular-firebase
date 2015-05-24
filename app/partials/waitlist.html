@@ -38,7 +38,9 @@
   <tbody>
     <tr ng-repeat="party in parties | orderByPriority">
       <td>
-        <input type="checkbox"/>
+        <input type="checkbox"
+                ng-model="party.done"
+                ng-change="parties.$save(party.$id)"/>
       </td>
       <td>
         <div>
@@ -53,11 +55,11 @@
       </td>
       <td>
         <div>
-          <!-- TODO: Add party notified -->
+          {{party.notified}}
         </div>
       </td>
       <td>
-        <button ng-click="sendTextMessage(party.phone)"
+        <button ng-click="sendTextMessage(party)"
                 type="submit"
                 class="btn btn-success">Send SMS</button>
         <button ng-click="parties.$remove(party.$id)"
