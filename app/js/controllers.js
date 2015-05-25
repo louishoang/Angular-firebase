@@ -23,16 +23,7 @@ angular.module('myApp.controllers', [])
 
     // send message start
     $scope.sendTextMessage = function(party){
-      var newTextMessage = {
-        phoneNumber: party.phone,
-        size: party.size,
-        name: party.name
-      };
-
-      sendTextMessageService.saveTextMessage(newTextMessage);
-      // Change notified status
-      party.notified = "Yes";
-      $scope.parties.$save(party.$id);
+      sendTextMessageService.saveTextMessage(party);
     };
   }])
   .controller('AuthController',
