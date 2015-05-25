@@ -28,7 +28,7 @@ angular.module('myApp.controllers', [])
 
     // send message start
     $scope.sendTextMessage = function(party){
-      sendTextMessageService.saveTextMessage(party);
+      sendTextMessageService.saveTextMessage(party, $scope.currentUser.id);
     };
   }])
   .controller('AuthController',

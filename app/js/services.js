@@ -71,20 +71,19 @@ angular.module('myApp.services', [])
   })
   .factory('sendTextMessageService',
              function(dataService, partyService){
-
     var textMessages = dataService.$child('textMessages');
 
     var msgObject = {
-      saveTextMessage: function(party){
+      saveTextMessage: function(party, userId){
         var newTextMessage = {
           phoneNumber: party.phone,
           size: party.size,
           name: party.name
         };
         textMessages.$add(newTextMessage);
-        // Change notified status
-        party.notified = "Yes";
-        partyService.parties.$save(party.$id);
+        partyService.getPartiesByUserId(userId)
+                    .$child(party.$id)
+                    .$update({notified: "Yes"});
       }
     };
 
