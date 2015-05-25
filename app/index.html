@@ -36,9 +36,11 @@
           <!-- <li class="active"><a href="#">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li> -->
-          <li><a href="#/login">Log in</a></li>
+          <li><a href="#/login"
+                  ng-hide="currentUser">Log in</a></li>
           <li><a href="javascript:;"
-               ng-click="logout()">Log out</a></li>
+               ng-click="logout()"
+               ng-show="currentUser">Log out</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
