@@ -4,6 +4,12 @@
 
 angular.module('myApp.services', [])
   .value('FIREBASE_URL', 'https://waitandeat-louishoan.firebaseio.com/')
+  .factory('dataService', function($firebase, FIREBASE_URL){
+    var dataRef = new Firebase(FIREBASE_URL);
+    var fireData = $firebase(dataRef);
+
+    return fireData;
+  })
   .factory('authService',
              function($firebaseSimpleLogin, $location,
                       FIREBASE_URL, $rootScope){
@@ -32,6 +38,9 @@ angular.module('myApp.services', [])
          auth.$logout();
         // Redirect user to home page
         $location.path('/');
+      },
+      getCurrentUser: function(){
+        return auth.$getCurrentUser();
       }
     };
 
@@ -46,29 +55,24 @@ angular.module('myApp.services', [])
 
     return authServiceObject;
   })
-  .factory('partyService', function($firebase, FIREBASE_URL){
-    // Etablish connection to firebase server
-    var partiesRef = new Firebase(FIREBASE_URL + 'parties');
-
-    // Get data from firebase SERVICE;
-    // This will print out a collection of data from database,
-    // similar to what index action does in rails
-    var parties = $firebase(partiesRef);
+  .factory('partyService', function(dataService){
+    var users = dataService.$child('users');
 
     var partyServiceObject = {
-      parties: parties,
-      saveParty: function(party){
-        parties.$add(party);
+      saveParty: function(party, userId){
+        users.$child(userId).$child('parties').$add(party);
+      },
+      getPartiesByUserId: function(userId){
+        return users.$child(userId).$child('parties');
       }
     };
 
     return partyServiceObject;
   })
   .factory('sendTextMessageService',
-             function($firebase, FIREBASE_URL, partyService){
+             function(dataService, partyService){
 
-    var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
-    var textMessages = $firebase(textMessageRef);
+    var textMessages = dataService.$child('textMessages');
 
     var msgObject = {
       saveTextMessage: function(party){

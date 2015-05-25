@@ -9,15 +9,20 @@ angular.module('myApp.controllers', [])
   .controller('WaitListController',
                ['$scope', 'partyService',
                 'sendTextMessageService',
+                'authService',
                  function($scope, partyService,
-                           sendTextMessageService) {
+                           sendTextMessageService, authService) {
 
-    $scope.parties = partyService.parties; // Bind parties from partyService
+    authService.getCurrentUser().then(function(user){
+      if(user){
+        $scope.parties = partyService.getPartiesByUserId(user.id);
+      }
+    });
 
     $scope.newParty = {name: '', phone: '', size: '', done: false, notified: "No"};  // similar to new action rails where we initialize an instance
 
     $scope.saveParty = function(){               //similar to create action in rails
-      partyService.saveParty($scope.newParty);  // Add data to fire base using .$add
+      partyService.saveParty($scope.newParty, $scope.currentUser.id);  // Add data to fire base using .$add
       $scope.newParty = {name: '', phone: '', size: '', done: false, notified: "No"};
     };
 
