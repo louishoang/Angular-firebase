@@ -63,4 +63,17 @@ angular.module('myApp.services', [])
     };
 
     return partyServiceObject;
+  })
+  .factory('sendTextMessageService',
+             function($firebase, FIREBASE_URL){
+    var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
+    var textMessages = $firebase(textMessageRef);
+
+    var msgObject = {
+      saveTextMessage: function(textMessage){
+        textMessages.$add(textMessage);
+      }
+    };
+
+    return msgObject;
   });

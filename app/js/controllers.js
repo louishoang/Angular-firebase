@@ -8,32 +8,28 @@ angular.module('myApp.controllers', [])
   }])
   .controller('WaitListController',
                ['$scope', 'partyService',
-                 function($scope, partyService) {
+                'sendTextMessageService',
+                 function($scope, partyService,
+                           sendTextMessageService) {
 
-    // Bind parties from partyService
-    $scope.parties = partyService.parties;
+    $scope.parties = partyService.parties; // Bind parties from partyService
 
-    // similar to new action rails where we initialize an instance
-    $scope.newParty = {name: '', phone: '', size: '', done: false, notified: "No"};
+    $scope.newParty = {name: '', phone: '', size: '', done: false, notified: "No"};  // similar to new action rails where we initialize an instance
 
-    //similar to create action in rails
-    $scope.saveParty = function(){
-      // Add data to fire base using .$add
-      partyService.saveParty($scope.newParty);
+    $scope.saveParty = function(){               //similar to create action in rails
+      partyService.saveParty($scope.newParty);  // Add data to fire base using .$add
       $scope.newParty = {name: '', phone: '', size: '', done: false, notified: "No"};
     };
 
     // send message start
     $scope.sendTextMessage = function(party){
-      var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
-      var textMessages = $firebase(textMessageRef);
       var newTextMessage = {
         phoneNumber: party.phone,
         size: party.size,
         name: party.name
       };
-      textMessages.$add(newTextMessage);
 
+      sendTextMessageService.saveTextMessage(newTextMessage);
       // Change notified status
       party.notified = "Yes";
       $scope.parties.$save(party.$id);
